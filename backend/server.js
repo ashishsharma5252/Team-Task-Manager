@@ -19,18 +19,22 @@ const app = express();
 // middleware
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173"], // update later for production
     credentials: true,
-  }),
+  })
 );
+
 app.use(express.json());
 
+// debug middleware
 app.use((req, res, next) => {
   console.log("REQUEST RECEIVED:", req.url);
   next();
 });
+
+// test route
 app.get("/", (req, res) => {
-  res.send("Backend is runningg 🚀");
+  res.send("Backend is running 🚀");
 });
 
 // routes
@@ -40,7 +44,7 @@ app.use("/api/tasks", taskRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/users", userRoutes);
 
-// connect DB
+// connect DB & start server
 const startServer = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
@@ -49,27 +53,18 @@ const startServer = async () => {
     const PORT = process.env.PORT || 8080;
 
     app.listen(PORT, "0.0.0.0", () => {
-      console.log(`Server running on port ${PORT}`);
+      console.log("=== SERVER STARTED ===");
+      console.log(`PORT: ${PORT}`);
     });
   } catch (error) {
     console.error("Startup error:", error);
-    process.exit(1); // fail clearly
+    process.exit(1);
   }
 };
 
 startServer();
 
-// server
-const PORT = process.env.PORT || 8080;
-
-app.listen(PORT, "0.0.0.0", () => {
-  console.log("=== SERVER STARTED ===");
-  console.log(`PORT: ${PORT}`);
-});
-
-
-
-
+// error handlers
 process.on("uncaughtException", (err) => {
   console.error("Uncaught Exception:", err);
 });
