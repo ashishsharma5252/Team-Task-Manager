@@ -25,6 +25,10 @@ app.use(
 );
 app.use(express.json());
 
+app.use((req, res, next) => {
+  console.log("REQUEST RECEIVED:", req.url);
+  next();
+});
 app.get("/", (req, res) => {
   res.send("Backend is runningg 🚀");
 });
