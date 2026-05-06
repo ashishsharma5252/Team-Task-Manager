@@ -1,3 +1,6 @@
+import crypto from "crypto";
+global.crypto = crypto;
+
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
