@@ -37,10 +37,23 @@ app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/users", userRoutes);
 
 // connect DB
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB Connected"))
-  .catch((err) => console.log(err));
+const startServer = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("MongoDB Connected");
+
+    const PORT = process.env.PORT || 8080;
+
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Startup error:", error);
+    process.exit(1); // fail clearly
+  }
+};
+
+startServer();
 
 // server
 const PORT = process.env.PORT || 8080;
@@ -48,4 +61,15 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, "0.0.0.0", () => {
   console.log("=== SERVER STARTED ===");
   console.log(`PORT: ${PORT}`);
+});
+
+
+
+
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception:", err);
+});
+
+process.on("unhandledRejection", (err) => {
+  console.error("Unhandled Rejection:", err);
 });
