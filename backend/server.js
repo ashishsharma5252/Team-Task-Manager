@@ -43,7 +43,9 @@ mongoose
   .catch((err) => console.log(err));
 
 // server
-const PORT = process.env.PORT || 6000;
+const PORT = process.env.PORT || 8080;
+
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log("=== SERVER STARTED ===");
+  console.log(`PORT: ${PORT}`);
 });
